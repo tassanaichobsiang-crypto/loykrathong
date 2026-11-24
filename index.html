@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>ลอยกระทงกับเธอ</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Charm:wght@700&family=Sarabun:wght@400;600&display=swap">
+<style>
+/*
+VOICE: อ่อนโยน เงียบ ๆ เหมือนจดหมายรักคืนวันเพ็ญ
+IDEA: ริมแม่น้ำคืนพระจันทร์เต็มดวง กระทงใบตองลอยออกไปหาขอบฟ้า
+PICTURE: ฉากเต็มจอ ฟ้า ดวงจันทร์ เงาจันทร์บนน้ำ และกระทงที่ปล่อยได้จริง
+COLOUR and TYPE: น้ำเงินกลางคืน + ทองแสงจันทร์ + เขียวใบตอง / Charm หัวเรื่อง, Sarabun เนื้อความ
+LAYOUT: การ์ดข้อความลอยบนฟ้า กระทงอยู่ในน้ำด้านล่าง ซ้อนเป็นแนวตั้งในมือถือ
+*/
+:root{color-scheme:dark;--sky1:#050b24;--sky2:#14235a;--water:#08122e;--moon:#fff3c9;--gold:#f4c86a;--ink:#f5efe1;--soft:#b9c2e0;--card:rgba(10,18,48,.72)}
+*{box-sizing:border-box;min-width:0}
+html,body{height:100%}
+body{margin:0;background:var(--sky1);color:var(--ink);font:17px/1.65 "Sarabun",system-ui,sans-serif;overflow:hidden}
+.scene{position:fixed;inset:0;overflow:hidden;background:linear-gradient(#050b24,#14235a 52%,#2a3a78 62%)}
+.star{position:absolute;border-radius:50%;background:#fff}
+.moon,.halo{position:absolute;border-radius:50%;right:12%;top:40%}
+.moon{width:86px;height:86px;margin:-43px -43px 0 0;transform:translateX(-43px);background:radial-gradient(circle at 40% 38%,#fffbe8,#fff0bf 75%,#f1d690);box-shadow:inset -8px -6px 0 rgba(232,212,154,.25)}
+.halo{width:320px;height:320px;margin:-160px -160px 0 0;transform:translateX(-43px);background:radial-gradient(circle,rgba(255,243,201,.5),rgba(244,200,106,.1) 45%,transparent 70%)}
+.hills{position:absolute;left:0;width:100%;height:44px;top:calc(62% - 42px)}
+.water{position:absolute;left:0;right:0;top:62%;bottom:0;background:linear-gradient(#1a2a62,#0d1a44 25%,#050a1e)}
+.refl{position:absolute;top:62%;bottom:0;right:12%;width:70px;margin-right:-35px;transform:translateX(-43px)}
+.refl i{position:absolute;left:50%;height:2.5px;border-radius:2px;background:#fff0bf}
+.river{position:absolute;left:0;right:0;top:62%;bottom:0}
+.k{position:absolute;width:var(--w,120px);pointer-events:none}
+.k svg{display:block;width:100%;height:auto;animation:bob 3.4s ease-in-out infinite}
+.amb{animation:across var(--d) linear infinite;animation-delay:var(--dl);opacity:.75}
+@keyframes across{from{left:-20%}to{left:110%}}
+@keyframes bob{0%,100%{transform:translateY(0) rotate(-1.5deg)}50%{transform:translateY(-5px) rotate(1.5deg)}}
+.mine{left:50%;bottom:4%;animation:away 26s cubic-bezier(.25,.6,.4,1) forwards}
+@keyframes away{0%{transform:translate(-50%,40px) scale(1);opacity:0}6%{opacity:1}85%{opacity:1}100%{transform:translate(calc(-50% + var(--dx)),calc(-1 * var(--dy))) scale(.22);opacity:0}}
+.wishtag{position:absolute;bottom:100%;left:50%;transform:translateX(-50%);width:max-content;max-width:240px;text-align:center;font-size:15px;color:var(--moon);text-shadow:0 0 10px rgba(255,220,140,.8);animation:tag 9s ease forwards;white-space:normal}
+@keyframes tag{0%{opacity:0;translate:0 10px}15%,60%{opacity:1;translate:0 0}100%{opacity:0;translate:0 -30px}}
+.ui{position:fixed;left:0;right:0;top:0;display:flex;justify-content:center;padding:max(5vh,20px) 16px 0;pointer-events:none}
+.card{pointer-events:auto;width:min(460px,100%);background:var(--card);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border:1px solid rgba(244,200,106,.28);border-radius:22px;padding:26px 24px 22px;box-shadow:0 20px 60px rgba(0,0,0,.45);animation:rise .9s ease both}
+@keyframes rise{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+.card[hidden]{display:none}
+h1{font:700 clamp(32px,8vw,46px)/1.15 "Charm",serif;color:var(--gold);margin:0 0 6px;text-wrap:balance}
+h2{font:700 30px/1.2 "Charm",serif;color:var(--gold);margin:0 0 10px}
+p{margin:0 0 14px}
+.sub{color:var(--soft)}
+.letter p{margin:0 0 10px}
+.sign{font:700 26px/1.3 "Charm",serif;color:var(--gold);text-align:right;margin-top:6px}
+label{display:block;font-weight:600;margin-bottom:6px}
+input,textarea{width:100%;font:16px/1.5 "Sarabun",sans-serif;color:var(--ink);background:rgba(255,255,255,.07);border:1px solid rgba(185,194,224,.35);border-radius:12px;padding:12px 14px;outline:none}
+textarea{resize:none;height:96px}
+input:focus,textarea:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(244,200,106,.25)}
+.hint{min-height:22px;font-size:14px;color:#ffb3a7;margin:6px 0 4px}
+.row{display:flex;flex-wrap:wrap;gap:10px;margin-top:8px}
+button{min-height:46px;padding:0 20px;font:600 16px "Sarabun",sans-serif;border-radius:999px;border:0;cursor:pointer;background:var(--gold);color:#1b1404}
+button.ghost{background:transparent;color:var(--ink);border:1px solid rgba(185,194,224,.45)}
+button:focus-visible{outline:3px solid var(--moon);outline-offset:3px}
+.count{font-size:13px;color:var(--soft);text-align:right;margin-top:4px}
+.music{position:fixed;right:14px;bottom:14px;z-index:5;min-height:44px;padding:0 16px;font-size:14px;background:rgba(10,18,48,.7);color:var(--ink);border:1px solid rgba(244,200,106,.4)}
+.music[hidden]{display:none}
+.live{position:fixed;left:14px;bottom:14px;z-index:5;font-size:14px;padding:8px 14px;border-radius:999px;background:rgba(10,18,48,.7);border:1px solid rgba(185,194,224,.35);color:var(--soft)}
+.live b{color:#7be39a}
+.nm{position:absolute;bottom:100%;left:50%;transform:translateX(-50%);width:max-content;max-width:200px;font-size:12px;color:var(--moon);opacity:.85;text-align:center;text-shadow:0 0 6px rgba(0,0,0,.8)}
+@media(max-width:600px){.ui{padding-top:16px}.card{padding:22px 18px 18px}body{font-size:16px}}
+@media(prefers-reduced-motion:reduce){.k svg,.shim,.tw{animation:none!important}.card{animation:none}}
+.tw{animation:tw 3s ease-in-out infinite}
+@keyframes tw{50%{opacity:.25}}
+.shim{animation:shim 4s ease-in-out infinite}
+@keyframes shim{50%{opacity:.35;transform:scaleX(.8)}}
+</style>
+</head>
+<body>
+<div class="scene" aria-hidden="true">
+  <div id="stars"></div>
+  <div class="halo"></div><div class="moon"></div>
+  <svg class="hills" viewBox="0 0 400 40" preserveAspectRatio="none"><path d="M0 40 L0 22 Q40 4 80 18 Q120 0 170 16 Q220 4 260 18 Q320 0 400 20 L400 40 Z" fill="#0a1236"/></svg>
+  <div class="water"></div>
+  <div class="refl" id="refl"></div>
+  <div class="river" id="river"></div>
+</div>
+
+<div class="ui">
+  <form class="card" id="gate" novalidate>
+    <h1>สุขสันต์วันลอยกระทง</h1>
+    <p class="sub">คืนนี้มีคนเตรียมกระทงใบหนึ่งไว้ให้เธอ</p>
+    <label for="name">ชื่อของเธอ</label>
+    <input id="name" maxlength="30" autocomplete="off" placeholder="พิมพ์ชื่อเล่นตรงนี้">
+    <div class="hint" id="nameHint"></div>
+    <button type="submit">เปิดดู</button>
+  </form>
+
+  <section class="card letter" id="letter" hidden>
+    <h2>ถึง <span id="toName"></span></h2>
+    <p>คืนนี้พระจันทร์เต็มดวง สวยมากเลย แต่สิ่งที่ทำให้คืนนี้พิเศษที่สุดคือการได้มีเธออยู่ด้วย</p>
+    <p>ขอบคุณที่อยู่ข้างกันมาตลอด ทั้งวันที่ดีและวันที่เหนื่อย ขอบคุณที่ทำให้เรื่องธรรมดากลายเป็นเรื่องที่อยากจำ</p>
+    <p>ปีนี้ขอลอยกระทงไปพร้อมคำอธิษฐานเดียว ขอให้เราได้จับมือกันแบบนี้ไปอีกนาน ๆ</p>
+    <div class="sign">รักเธอนะ</div>
+    <div class="row"><button type="button" id="toWish">ไปลอยกระทงกัน</button></div>
+  </section>
+
+  <form class="card" id="wish" hidden novalidate>
+    <h2>อธิษฐานก่อนปล่อยกระทง</h2>
+    <label for="wishText">คำอธิษฐานของเธอ</label>
+    <textarea id="wishText" maxlength="120" placeholder="ขอให้..."></textarea>
+    <div class="count"><span id="cnt">0</span>/120</div>
+    <div class="hint" id="wishHint"></div>
+    <div class="row"><button type="submit">ปล่อยกระทง</button><button type="button" class="ghost" id="back1">อ่านข้อความอีกครั้ง</button></div>
+  </form>
+
+  <section class="card" id="done" hidden>
+    <h2>กระทงของเธอลอยไปแล้ว</h2>
+    <p class="sub">ขอให้คำอธิษฐานเป็นจริงนะ</p>
+    <div class="row"><button type="button" id="again">ลอยอีกใบ</button><button type="button" class="ghost" id="back2">อ่านข้อความอีกครั้ง</button></div>
+  </section>
+</div>
+
+<button class="music" id="music" type="button" hidden>ปิดเพลง</button>
+<div class="live" id="live">กำลังเชื่อมต่อ…</div>
+
+<script type="module">
+/* ===== วางค่า Firebase ของคุณตรงนี้ (Project settings > Your apps > Web app) ===== */
+const firebaseConfig={
+  apiKey:"",
+  authDomain:"",
+  projectId:"",
+  appId:""
+};
+/* ============================================================================ */
+{
+const $=id=>document.getElementById(id);
+const NS='http://www.w3.org/2000/svg';
+
+/* ดาวและแสงจันทร์บนน้ำ */
+let s='';
+for(let i=0;i<80;i++){const r=(Math.random()*2+1).toFixed(1);s+=`<i class="star tw" style="left:${(Math.random()*100).toFixed(2)}%;top:${(Math.random()*58).toFixed(2)}%;width:${r}px;height:${r}px;opacity:${(Math.random()*.6+.3).toFixed(2)};animation-delay:${(Math.random()*3).toFixed(2)}s"></i>`}
+$('stars').innerHTML=s;
+s='';
+for(let i=0;i<16;i++){const w=60-i*2.4+Math.random()*10;s+=`<i class="shim" style="top:${(2+i*5.5).toFixed(1)}%;width:${w.toFixed(0)}px;margin-left:${(-w/2).toFixed(0)}px;opacity:${(.7-i*.035).toFixed(2)};animation-delay:${(i*.25).toFixed(2)}s"></i>`}
+$('refl').innerHTML=s;
+
+/* กระทงใบตอง */
+function krathong(){
+  let petals='';
+  for(let i=0;i<9;i++){const x=12+i*12,c=i%2?'#4f9a52':'#2f7a3e';petals+=`<path d="M${x-8} 70 L${x} 44 L${x+8} 70 Z" fill="${c}" stroke="#1f5a2c" stroke-width=".8"/>`}
+  const fl=[[36,46,'#f2a33a'],[50,42,'#f07ca8'],[70,42,'#f2a33a'],[84,46,'#f07ca8'],[60,46,'#fff4e0']];
+  let flowers=fl.map(([x,y,c])=>`<circle cx="${x}" cy="${y}" r="8" fill="${c}"/><circle cx="${x}" cy="${y}" r="3" fill="#ffe08a"/>`).join('');
+  return `<svg viewBox="0 0 120 92" xmlns="${NS}">
+    <circle cx="60" cy="18" r="22" fill="#ffd27a" opacity=".22"/>
+    <ellipse cx="60" cy="80" rx="54" ry="6" fill="#ffd27a" opacity=".12"/>
+    <ellipse cx="60" cy="72" rx="54" ry="12" fill="#245e31"/>
+    ${petals}
+    <ellipse cx="60" cy="66" rx="48" ry="8" fill="#1f5a2c"/>
+    ${flowers}
+    <line x1="46" y1="44" x2="42" y2="22" stroke="#c9a06a" stroke-width="1.4"/><circle cx="42" cy="22" r="1.6" fill="#ff6a3d"/>
+    <line x1="74" y1="44" x2="78" y2="22" stroke="#c9a06a" stroke-width="1.4"/><circle cx="78" cy="22" r="1.6" fill="#ff6a3d"/>
+    <rect x="57" y="22" width="6" height="22" rx="1.5" fill="#f6efe0"/>
+    <g transform="translate(60 21)"><path d="M0 -15 C4 -9 4 -3 0 0 C-4 -3 -4 -9 0 -15 Z" fill="#ffb648"><animateTransform attributeName="transform" type="scale" values="1 1;1.08 .92;.95 1.06;1 1" dur="1.1s" repeatCount="indefinite"/></path></g>
+    <path d="M60 11 C62 14 62 18 60 20 C58 18 58 14 60 11 Z" fill="#fff4c2"/>
+  </svg>`;
+}
+
+
+
+const river=$('river');
+[[18,60,0,64],[44,46,-17,52],[70,75,-33,80],[30,52,-44,46]].forEach(([top,d,dl,w])=>{
+  const k=document.createElement('div');
+  k.className='k amb';k.style.top=top+'%';k.style.setProperty('--d',d+'s');k.style.setProperty('--dl',dl+'s');k.style.setProperty('--w',w+'px');
+  k.innerHTML=krathong();river.appendChild(k);
+});
+
+/* ทำนองไทยแต่งใหม่ (ไม่ใช่เพลงลอยกระทง) */
+let ac=null,master=null,timer=null,step=0,nextT=0,on=false;
+const F={G4:392,A4:440,C5:523.25,D5:587.33,E5:659.25,G5:783.99,A5:880,C6:1046.5};
+const mel=('E5 G5 A5 - G5 E5 D5 - E5 D5 C5 A4 C5 - - - '+
+ 'D5 E5 G5 - A5 C6 A5 - G5 E5 D5 E5 G5 - - - '+
+ 'A5 G5 E5 D5 C5 D5 E5 - D5 C5 A4 G4 A4 - - - '+
+ 'C5 D5 E5 G5 E5 D5 C5 - A4 C5 D5 C5 C5 - - -').trim().split(/\s+/);
+const BEAT=.42;
+function pluck(f,t){
+  [[f,'triangle',.28],[f*2,'sine',.07]].forEach(([fr,type,g])=>{
+    const o=ac.createOscillator(),v=ac.createGain();o.type=type;o.frequency.value=fr;
+    v.gain.setValueAtTime(0,t);v.gain.linearRampToValueAtTime(g,t+.01);v.gain.exponentialRampToValueAtTime(.0008,t+1.3);
+    o.connect(v).connect(master);o.start(t);o.stop(t+1.4);
+  });
+}
+function ching(t){const o=ac.createOscillator(),v=ac.createGain();o.frequency.value=2093;v.gain.setValueAtTime(.05,t);v.gain.exponentialRampToValueAtTime(.0005,t+.5);o.connect(v).connect(master);o.start(t);o.stop(t+.55)}
+function sched(){
+  while(nextT<ac.currentTime+.6){
+    const n=mel[step%mel.length];
+    if(n!=='-')pluck(F[n],nextT);
+    if(step%4===0)ching(nextT);
+    step++;nextT+=BEAT;
+  }
+}
+function startMusic(){
+  try{
+    if(!ac){
+      ac=new (window.AudioContext||window.webkitAudioContext)();
+      master=ac.createGain();master.gain.value=.5;master.connect(ac.destination);
+      [130.81,196].forEach(fr=>{const o=ac.createOscillator(),v=ac.createGain();o.type='sine';o.frequency.value=fr;v.gain.value=.035;o.connect(v).connect(master);o.start()});
+      nextT=ac.currentTime+.2;
+    }
+    ac.resume();clearInterval(timer);timer=setInterval(sched,150);on=true;
+    $('music').hidden=false;$('music').textContent='ปิดเพลง';
+  }catch(e){}
+}
+$('music').addEventListener('click',()=>{
+  if(!ac)return;
+  if(on){ac.suspend();clearInterval(timer);on=false;$('music').textContent='เปิดเพลง'}
+  else{ac.resume().then(()=>{nextT=ac.currentTime+.1});timer=setInterval(sched,150);on=true;$('music').textContent='ปิดเพลง'}
+});
+
+/* ขั้นตอนหน้าจอ */
+const show=id=>['gate','letter','wish','done'].forEach(x=>$(x).hidden=x!==id);
+$('gate').addEventListener('submit',e=>{
+  e.preventDefault();
+  const n=$('name').value.trim();
+  if(!n){$('nameHint').textContent='พิมพ์ชื่อก่อนนะ';$('name').focus();return}
+  me=n;$('toName').textContent=n;startMusic();show('letter');
+});
+$('toWish').addEventListener('click',()=>{show('wish');$('wishText').focus()});
+$('back1').addEventListener('click',()=>show('letter'));
+$('back2').addEventListener('click',()=>show('letter'));
+$('again').addEventListener('click',()=>{$('wishText').value='';$('cnt').textContent='0';show('wish')});
+$('wishText').addEventListener('input',()=>{$('cnt').textContent=$('wishText').value.length;$('wishHint').textContent=''});
+let me='',live=null;
+function launch(w,label){
+  const k=document.createElement('div');
+  k.className='k mine';
+  const H=river.clientHeight;
+  k.style.setProperty('--w',Math.min(150,window.innerWidth*.36)+'px');
+  k.style.setProperty('--dx',((Math.random()-.5)*160).toFixed(0)+'px');
+  k.style.setProperty('--dy',(H*.8).toFixed(0)+'px');
+  k.innerHTML=krathong();
+  const tag=document.createElement('div');tag.className='wishtag';tag.textContent=label?label+': '+w:w;k.appendChild(tag);
+  k.addEventListener('animationend',ev=>{if(ev.animationName==='away')k.remove()});
+  river.appendChild(k);
+}
+function drifter(name){
+  const k=document.createElement('div');
+  k.className='k amb';k.style.top=(10+Math.random()*70).toFixed(0)+'%';
+  k.style.setProperty('--d',(50+Math.random()*30).toFixed(0)+'s');k.style.setProperty('--dl',(-Math.random()*60).toFixed(0)+'s');k.style.setProperty('--w',(46+Math.random()*20).toFixed(0)+'px');
+  k.innerHTML=krathong();
+  const t=document.createElement('div');t.className='nm';t.textContent=name;k.appendChild(t);
+  river.appendChild(k);
+}
+$('wish').addEventListener('submit',e=>{
+  e.preventDefault();
+  const w=$('wishText').value.trim();
+  if(!w){$('wishHint').textContent='พิมพ์คำอธิษฐานก่อนนะ';$('wishText').focus();return}
+  launch(w,'');
+  if(live)live.send(me,w).catch(()=>{$('live').textContent='ส่งขึ้นแม่น้ำไม่สำเร็จ'});
+  show('done');
+});
+
+/* เชื่อมต่อแบบสดผ่าน Firebase */
+(async()=>{
+  const st=$('live');
+  if(!firebaseConfig.projectId){st.textContent='ยังไม่ได้ตั้งค่าโหมดสด';return}
+  try{
+    const V='https://www.gstatic.com/firebasejs/10.12.2/';
+    const {initializeApp}=await import(V+'firebase-app.js');
+    const fs=await import(V+'firebase-firestore.js');
+    const db=fs.getFirestore(initializeApp(firebaseConfig));
+    const col=fs.collection(db,'krathongs');
+    live={send:(name,wish)=>fs.addDoc(col,{name:String(name).slice(0,30),wish:String(wish).slice(0,120),ts:fs.serverTimestamp()})};
+    let first=true;
+    fs.onSnapshot(fs.query(col,fs.orderBy('ts','desc'),fs.limit(30)),snap=>{
+      st.innerHTML='<b>●</b> สด: ลอยอยู่ '+snap.size+' ใบ';
+      snap.docChanges().forEach(c=>{
+        if(c.type!=='added'||c.doc.metadata.hasPendingWrites)return;
+        const d=c.doc.data(),name=String(d.name||'ใครบางคน').slice(0,30),wish=String(d.wish||'').slice(0,120);
+        if(first){if(river.querySelectorAll('.nm').length<8)drifter(name)}
+        else launch(wish,name);
+      });
+      first=false;
+    },()=>{st.textContent='เชื่อมต่อโหมดสดไม่ได้'});
+  }catch(err){st.textContent='เชื่อมต่อโหมดสดไม่ได้'}
+})();
+}
+</script>
+</body>
+</html>
